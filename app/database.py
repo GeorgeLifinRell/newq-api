@@ -1,6 +1,6 @@
 import sqlite3
 
-DATABASE_URL = 'newq.db'
+DATABASE_URL = './newq.db'
 
 def get_db():
     conn = sqlite3.connect(DATABASE_URL)

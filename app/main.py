@@ -1,9 +1,12 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-import sqlite3
+from fastapi import FastAPI
+
+import routers
 
 app = FastAPI()
 DATABASE = 'newq.db'
+
+# Include routers
+app.include_router(router=routers.router)
 
 @app.get('/')
 async def hello_world():

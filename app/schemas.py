@@ -13,6 +13,7 @@ class ShopUpdate(Shop):
 
 class ShopResponse(Shop):
     id: int
+    name: str
 
 # Menu Items Model
 class MenuItem(BaseModel):
@@ -29,3 +30,6 @@ class MenuItemUpdate(MenuItem):
 
 class MenuItemResponse(MenuItem):
     id: int
+    shop_id: int
+    name: str
+    price: float

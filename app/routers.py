@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
-from ..schemas import *
-from ..crud import *
+from schemas import *
+from crud import *
 
 router = APIRouter()
 

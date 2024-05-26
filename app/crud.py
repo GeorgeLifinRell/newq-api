@@ -1,6 +1,5 @@
-from .database import get_db
-from .schemas import MenuItem
-from .schemas import Shop
+from database import get_db
+from schemas import MenuItem, Shop
 
 
 def get_menu_items():
@@ -9,7 +8,9 @@ def get_menu_items():
     cursor.execute("SELECT * FROM MENU_ITEMS")
     menu_items = cursor.fetchall()
     conn.close()
-    return [{"id": row[0], "name": row[1], "price": row[2]} for row in menu_items]
+    if menu_items is None:
+        return {"message": "No items found"}
+    return [{"id": row[0], "name": row[1], "price": row[2], "shop_id": row[3]} for row in menu_items]
 
 
 def get_menu_item(menu_item_id: int):
@@ -20,13 +21,13 @@ def get_menu_item(menu_item_id: int):
     conn.close()
     if menu_item is None:
         return None
-    return {"id": menu_item[0], "name": menu_item[1], "price": menu_item[2]}
+    return {"id": menu_item[0], "name": menu_item[1], "price": menu_item[2], "shop_id": menu_item[3]}
 
 
 def create_menu_item(menu_item: MenuItem):
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO MENU_ITEMS (name, price) VALUES (?, ?)", (menu_item.name, menu_item.price))
+    cursor.execute("INSERT INTO MENU_ITEMS (id, name, price, shop_id) VALUES (?, ?, ?, ?)", (menu_item.id, menu_item.name, menu_item.price, menu_item.shop_id))
     conn.commit()
     conn.close()
     return {"message": "Menu item created successfully"}
@@ -79,7 +80,7 @@ def create_shop(shop: Shop):
     return {"message": "Shop created successfully"}
 
 
-def update_shop(shop_id: int, shop: MenuItem):
+def update_shop(shop_id: int, shop: Shop):
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute("UPDATE SHOPS SET id=?, name=? WHERE id=?", (shop.id, shop.name, shop_id))
