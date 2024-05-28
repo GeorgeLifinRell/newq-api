@@ -1,7 +1,8 @@
 from database import get_db
-from schemas import MenuItem, Shop
+from schemas import MenuItem, Shop, Vendor
 
 
+# MenuItems CRUD
 def get_menu_items():
     conn = get_db()
     cursor = conn.cursor()
@@ -51,6 +52,7 @@ def delete_menu_item(menu_item_id: int):
     return {"message": "Menu item deleted successfully"}
 
 
+# Shops CRUD
 def get_shops():
     conn = get_db()
     cursor = conn.cursor()
@@ -93,6 +95,62 @@ def delete_shop(shop_id: int):
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute("DELETE FROM SHOPS WHERE id=?", (shop_id))
+    conn.commit()
+    conn.close()
+    return {"message": "Shop deleted successfully"}
+
+
+# Vendors CRUD
+def get_vendors():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM VENDORS")
+    vendors = cursor.fetchall()
+    if vendors is None:
+        return None
+    conn.close()
+    return [{"id": vendor[0], "name": vendor[1]} for vendor in vendors]
+
+
+def get_vendor(vendor_id: int):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM VENDORS WHERE id=?', (vendor_id,))
+    vendor = cursor.fetchone()
+    conn.close()
+    if vendor is None:
+        return None
+    return {"id": vendor[0], "name": vendor[1]}
+
+
+def create_vendor(vendor: Vendor):
+    conn = get_db()
+    cursor = conn.cursor()
+    if get_vendor(vendor_id=vendor.id) is not None:
+        return None
+    cursor.execute("INSERT INTO VENDORS (id, name) VALUES (?, ?)", (vendor.id, vendor.name))
+    conn.commit()
+    conn.close()
+    return {"message": "Shop created successfully"}
+
+
+def update_vendor(vendor_id: int, vendor: Vendor):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE VENDORS SET id=?, name=? WHERE id=?", (vendor.id, vendor.name, vendor_id))
+    if cursor.rowcount() < 1:
+        return None
+    conn.commit()
+    conn.close()
+    return {"message": "Shop updated successfully"}
+
+
+def delete_vendor(vendor_id: int):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM VENDORS WHERE id=?", (vendor_id))
+    if cursor.rowcount() < 1:
+        return None
     conn.commit()
     conn.close()
     return {"message": "Shop deleted successfully"}

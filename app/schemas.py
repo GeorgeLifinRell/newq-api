@@ -1,9 +1,24 @@
 from pydantic import BaseModel
 
+# Vendor Model
+class Vendor(BaseModel):
+    id: int
+    name: str
+
+class VendorCreate(Vendor):
+    pass
+
+class VendorUpdate(Vendor):
+    pass
+
+class VendorDelete(Vendor):
+    pass
+
 # Shop Model
 class Shop(BaseModel):
     id: int
     name: str
+    vendor_id: int
 
 class ShopCreate(Shop):
     pass
@@ -11,9 +26,8 @@ class ShopCreate(Shop):
 class ShopUpdate(Shop):
     pass
 
-class ShopResponse(Shop):
-    id: int
-    name: str
+class ShopDelete(Shop):
+    pass
 
 # Menu Items Model
 class MenuItem(BaseModel):
@@ -28,8 +42,5 @@ class MenuItemCreate(MenuItem):
 class MenuItemUpdate(MenuItem):
     pass
 
-class MenuItemResponse(MenuItem):
-    id: int
-    shop_id: int
-    name: str
-    price: float
+class MenuItemDelete(MenuItem):
+    pass
